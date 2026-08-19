@@ -219,12 +219,12 @@ cov_names = paste0('cov', 1:n_covar)
 colnames(long_dat) = c('id', 'start', 'stop', 'origin', 'dest', cov_names)
 cox_form = as.formula(paste('Surv(start, stop, event) ~', paste(cov_names, collapse=' + ')))
 
-beta_vec <- c()
+beta_vec = c()
 ordered_trans = list(c(1,2), c(1,3), c(2,1), c(2,3), c(3,1), c(3,2))
 
 for (tr in ordered_trans) {
-  dsub <- subset(long_dat, origin == tr[1])
-  dsub$event <- as.integer(dsub$dest == tr[2])
+  dsub = subset(long_dat, origin == tr[1])
+  dsub$event = as.integer(dsub$dest == tr[2])
   
   fit_cox = tryCatch({ coxph(cox_form, data = dsub) }, error = function(e) NULL)
   
