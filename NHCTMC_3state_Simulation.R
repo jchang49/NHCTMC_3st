@@ -332,12 +332,12 @@ SE = tryCatch({
   rep(NA, length(fit$par))
 })
 
-alpha_labels = paste0('alpha_', c('12', '13', '21', '23', '31', '32'))
+alpha_labels = paste0('a_', c('12', '13', '21', '23', '31', '32'))
 beta_labels = c()
 
 for (tr in c('12', '13', '21', '23', '31', '32')) {
   for (i in 1:n_covar) {
-    beta_labels = c(beta_labels, paste0('beta_', tr, '_cov', i))
+    beta_labels = c(beta_labels, paste0('beta_', tr, '_(', i, ')'))
   }
 }
 
