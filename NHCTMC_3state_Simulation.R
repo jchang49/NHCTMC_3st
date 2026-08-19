@@ -129,7 +129,7 @@ P_3 = function(s, t, x, a12, a13, a21, a23, a31, a32, beta12, beta13, beta21, be
 
 
 # Data Simulation
-MC1 = matrix(rep(NA, N * (T + 1)), nrow = N, ncol = (T + 1))
+MC = matrix(rep(NA, N * (T + 1)), nrow = N, ncol = (T + 1))
 X = matrix(runif(N), ncol=1)
 n_covar = ncol(X)
 
@@ -166,15 +166,13 @@ for (i in 1:N) {
   
   for (j in 1:length(timer)) {
     if (timer[j] > T) break
-    MC1[i, ceiling(timer[j]) + 1] = state[j]
+    MC[i, ceiling(timer[j]) + 1] = state[j]
   }
 }
 
-for (i in 1:nrow(MC1)) {
-  MC1[i, ] = na.locf(MC1[i, ])
+for (i in 1:nrow(MC)) {
+  MC[i, ] = na.locf(MC[i, ])
 }
-
-MC = rbind(MC1)
 
 
 # Initial value estimation
