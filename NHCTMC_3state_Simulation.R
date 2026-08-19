@@ -7,8 +7,7 @@ library('survival')
 closeAllConnections()
 
 # Set up for parallel optimization
-cores <- max(1, detectCores() - 1)
-cl <- makeCluster(spec = cores, outfile = "")
+cl = makeCluster(spec = detectCores() - 1, outfile = '')
 setDefaultCluster(cl = cl)
 
 N = 200  # Number of subjects
@@ -144,18 +143,18 @@ for (i in 1:N) {
     Z2 = rexp(1, rate=1)
     
     if (st == 1) {
-      t12 = (exp(Z1/ g((X[i,] %*% beta12)[1]))*(1+tm^a12)-1)^(1/a12)
-      t13 = (exp(Z2/ g((X[i,] %*% beta13)[1]))*(1+tm^a13)-1)^(1/a13)
+      t12 = (exp(Z1 / g((X[i,] %*% beta12)[1]))*(1+tm^a12)-1)^(1/a12)
+      t13 = (exp(Z2 / g((X[i,] %*% beta13)[1]))*(1+tm^a13)-1)^(1/a13)
       t_next = min(t12, t13)
       s_next = which.min(c(Inf, t12, t13))
     } else if (st == 2) {
-      t21 = (exp(Z1/ g((X[i,] %*% beta21)[1]))*(1+tm^a21)-1)^(1/a21)
-      t23 = (exp(Z2/ g((X[i,] %*% beta23)[1]))*(1+tm^a23)-1)^(1/a23)
+      t21 = (exp(Z1 / g((X[i,] %*% beta21)[1]))*(1+tm^a21)-1)^(1/a21)
+      t23 = (exp(Z2 / g((X[i,] %*% beta23)[1]))*(1+tm^a23)-1)^(1/a23)
       t_next = min(t21, t23)
       s_next = which.min(c(t21, Inf, t23))
     } else if (st == 3) {
-      t31 = (exp(Z1/ g((X[i,] %*% beta31)[1]))*(1+tm^a31)-1)^(1/a31)
-      t32 = (exp(Z2/ g((X[i,] %*% beta32)[1]))*(1+tm^a32)-1)^(1/a32)
+      t31 = (exp(Z1 / g((X[i,] %*% beta31)[1]))*(1+tm^a31)-1)^(1/a31)
+      t32 = (exp(Z2 / g((X[i,] %*% beta32)[1]))*(1+tm^a32)-1)^(1/a32)
       t_next = min(t31, t32)
       s_next = which.min(c(t31, t32, Inf))
     }
@@ -217,9 +216,9 @@ for (i in 1:N) {
   }
 }
 long_dat = as.data.frame(do.call(rbind, long_list))
-cov_names = paste0("cov", 1:n_covar)
-colnames(long_dat) = c("id", "start", "stop", "origin", "dest", cov_names)
-cox_form = as.formula(paste("Surv(start, stop, event) ~", paste(cov_names, collapse=" + ")))
+cov_names = paste0('cov', 1:n_covar)
+colnames(long_dat) = c('id', 'start', 'stop', 'origin', 'dest', cov_names)
+cox_form = as.formula(paste('Surv(start, stop, event) ~', paste(cov_names, collapse=' + ')))
 
 beta_vec <- c()
 ordered_trans = list(c(1,2), c(1,3), c(2,1), c(2,3), c(3,1), c(3,2))
@@ -242,7 +241,7 @@ for (tr in ordered_trans) {
 par0 = c(m1, beta_vec)
 
 
-# --- 3. Negative Log-Likelihood & Optimization ---
+# Negative log-likelihood function
 nLL = function(par, MC, X) {
   sum_ll = 0
   timeseq = 0:T; timeseq[1] = 1e-15
@@ -282,7 +281,7 @@ clusterExport(cl, c('P_1', 'P_2', 'P_3', 'T', 'g'))
 
 Start_time = Sys.time()
 
-# Primary Optimization with L-BFGS-B bounds
+# Primary optimization with L-BFGS-B bounds
 fit = try(optimParallel(
   par = par0, 
   fn = nLL, 
@@ -295,8 +294,8 @@ fit = try(optimParallel(
 ))
 
 # Fallback to Nelder-Mead if L-BFGS-B fails
-if (inherits(fit, "try-error")) {
-  print("L-BFGS-B failed. Falling back to constrOptim (Nelder-Mead)...")
+if (inherits(fit, 'try-error')) {
+  print('L-BFGS-B failed. Falling back to constrOptim (Nelder-Mead)...')
   
   num_params = length(par0)
   num_constraints = 6
@@ -322,8 +321,8 @@ if (inherits(fit, "try-error")) {
 }
 
 End_time = Sys.time()
-print(difftime(End_time, Start_time, unit="mins"))
-print("Simulation run completed.")
+print(difftime(End_time, Start_time, unit='mins'))
+print('Simulation run completed.')
 
 stopCluster(cl)
 
@@ -334,12 +333,12 @@ SE = tryCatch({
   rep(NA, length(fit$par))
 })
 
-alpha_labels = paste0("alpha_", c("12", "13", "21", "23", "31", "32"))
+alpha_labels = paste0('alpha_', c('12', '13', '21', '23', '31', '32'))
 beta_labels = c()
 
-for (tr in c("12", "13", "21", "23", "31", "32")) {
+for (tr in c('12', '13', '21', '23', '31', '32')) {
   for (i in 1:n_covar) {
-    beta_labels = c(beta_labels, paste0("beta_", tr, "_cov", i))
+    beta_labels = c(beta_labels, paste0('beta_', tr, '_cov', i))
   }
 }
 
