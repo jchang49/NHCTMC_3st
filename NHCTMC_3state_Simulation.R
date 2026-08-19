@@ -296,11 +296,11 @@ fit = try(optimParallel(
 if (inherits(fit, 'try-error')) {
   print('L-BFGS-B failed. Falling back to constrOptim (Nelder-Mead)...')
   
-  num_params = length(par0)
-  num_constraints = 6
+  n_params = length(par0)
+  n_constraints = 6
   
-  UI = matrix(0, nrow = num_constraints, ncol = num_params)
-  CI = rep(0, num_constraints)
+  UI = matrix(0, nrow = n_constraints, ncol = n_params)
+  CI = rep(0, n_constraints)
   
   for (j in 1:6) {
     UI[j, j] = 1
