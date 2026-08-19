@@ -14,9 +14,8 @@ N = 200  # Number of subjects
 T = 25  # Time interval
 
 # Parameters
-a12 = 6; a13 = 3; a21 = 1.5; a23 = 4; a31 = 1; a32 = 2
-beta12 = c(1.25); beta13 = c(1.2); beta21 = c(-2.0); 
-beta23 = c(-4.5); beta31 = c(-1.0); beta32 = c(-0.5)
+a12 = 6; a13 = 3; a21 = 1.5; a23 = 4; a31 = 1; a32 = 2;
+beta12 = c(1.25); beta13 = c(1.2); beta21 = c(-2.0); beta23 = c(-4.5); beta31 = c(-1.0); beta32 = c(-0.5)
 
 p = c(1/3, 1/3, 1/3)
 
