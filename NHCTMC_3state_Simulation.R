@@ -10,20 +10,16 @@ closeAllConnections()
 cl = makeCluster(spec = detectCores() - 1, outfile = '')
 setDefaultCluster(cl = cl)
 
-N = 200  # Number of subjects
-T = 25  # Time interval
+N = 100  # Number of subjects
+T = 30  # Time interval
 
 # Parameters
-a12 = 6; a13 = 3; a21 = 1.5; a23 = 4; a31 = 1; a32 = 2;
-beta12 = c(1.25); beta13 = c(1.2); beta21 = c(-2.0); beta23 = c(-4.5); beta31 = c(-1.0); beta32 = c(-0.5)
+a12 = 7; a13 = 3; a21 = 1.5; a23 = 4; a31 = 1; a32 = 2;
+beta12 = c(0.5); beta13 = c(0.2); beta21 = c(-0.2); beta23 = c(0.3); beta31 = c(-0.4); beta32 = c(-0.3)
 
 p = c(1/3, 1/3, 1/3)
 
-g = function(x) {
-  y = x
-  y[y < 100] = log2(1+2^y[y < 100])
-  return(y)
-}
+g = function(x) { exp(x) }
 
 # Transition Probability Functions
 P_1 = function(s, t, x, a12, a13, a21, a23, a31, a32, beta12, beta13, beta21, beta23, beta31, beta32) {
@@ -128,7 +124,7 @@ P_3 = function(s, t, x, a12, a13, a21, a23, a31, a32, beta12, beta13, beta21, be
 
 # Data Simulation
 MC = matrix(rep(NA, N * (T + 1)), nrow = N, ncol = (T + 1))
-X = matrix(runif(N), ncol=1)
+X = matrix(rnorm(N, mean=0, sd=0.3), ncol=1)
 n_covar = ncol(X)
 
 for (i in 1:N) {
